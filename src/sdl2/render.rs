@@ -433,7 +433,7 @@ impl RenderTarget for Window {
     type Context = WindowContext;
 }
 
-#[derive(Clone, Copy, Debug)]
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
 pub enum ClippingRect {
     /// a non-zero area clipping rect
     Some(Rect),
