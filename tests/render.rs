@@ -4,7 +4,7 @@ extern crate sdl3;
 
 #[test]
 fn clipping_rect_intersection() {
-    // a zero area clipping rect intersecting with anything else gives zero
+    // a zero area clipping rect intersecting with anything else gives zero.
     assert_eq!(
         ClippingRect::Zero.intersection(ClippingRect::Zero),
         ClippingRect::Zero
