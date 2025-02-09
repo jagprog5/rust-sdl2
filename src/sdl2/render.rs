@@ -178,15 +178,14 @@ impl TryFrom<u32> for BlendMode {
     }
 }
 
-#[repr(i32)]
 #[derive(Copy, Clone, Eq, PartialEq, Hash, Debug)]
 pub enum ScaleMode {
     /// nearest pixel sampling. default
-    Nearest = SDL_ScaleMode::SDL_ScaleModeNearest as i32,
+    Nearest = SDL_ScaleMode::SDL_ScaleModeNearest as isize,
     /// linear filtering
-    Linear = SDL_ScaleMode::SDL_ScaleModeLinear as i32,
+    Linear = SDL_ScaleMode::SDL_ScaleModeLinear as isize,
     /// anisotropic filtering
-    Best = SDL_ScaleMode::SDL_ScaleModeBest as i32,
+    Best = SDL_ScaleMode::SDL_ScaleModeBest as isize,
 }
 
 impl TryFrom<u32> for ScaleMode {
@@ -194,8 +193,12 @@ impl TryFrom<u32> for ScaleMode {
 
     fn try_from(n: u32) -> Result<Self, Self::Error> {
         match n {
-            x if x == crate::sys::SDL_ScaleMode::SDL_ScaleModeNearest as u32 => Ok(ScaleMode::Nearest),
-            x if x == crate::sys::SDL_ScaleMode::SDL_ScaleModeLinear as u32 => Ok(ScaleMode::Linear),
+            x if x == crate::sys::SDL_ScaleMode::SDL_ScaleModeNearest as u32 => {
+                Ok(ScaleMode::Nearest)
+            }
+            x if x == crate::sys::SDL_ScaleMode::SDL_ScaleModeLinear as u32 => {
+                Ok(ScaleMode::Linear)
+            }
             x if x == crate::sys::SDL_ScaleMode::SDL_ScaleModeBest as u32 => Ok(ScaleMode::Best),
             _ => Err(()),
         }
@@ -2513,13 +2516,13 @@ impl<'r> Texture<'r> {
         InternalTexture { raw: self.raw }.color_mod()
     }
 
-    /// Sets an additional color value multiplied into render copy operations.
+    /// Sets the scale mode for use when rendered.
     #[inline]
     pub fn set_scale_mode(&mut self, scale: ScaleMode) {
         InternalTexture { raw: self.raw }.set_scale_mode(scale)
     }
 
-    /// Gets the additional color value multiplied into render copy operations.
+    /// Gets the scale mode for use when rendered.
     #[inline]
     pub fn scale_mode(&self) -> ScaleMode {
         InternalTexture { raw: self.raw }.scale_mode()
